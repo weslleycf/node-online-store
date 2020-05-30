@@ -1,13 +1,16 @@
 //imports
 const express = require('express');
 const bodyParser = require('body-parser')
-const adminRoutes = require('./routes/admin');
+const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const rootDir = require('./util/path');
 const path = require('path');
 
 //init express app
 const app = express();
+
+//set the view engine
+app.set('view engine', 'ejs');
 
 // listening port
 app.listen(3000, ()=>{
@@ -22,10 +25,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //set routes
-app.use('/admin', adminRoutes); 
+app.use('/admin', adminData.routes); 
 app.use(shopRoutes);
 
 // set 404 catch all route
 app.use((req, res, next) =>{
-    res.status(404).sendFile(path.join(rootDir, 'views', '404.html'));
+    res.render('404', {pageTitle: 'Page not found'});
 });
